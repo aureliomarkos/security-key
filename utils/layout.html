@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dashboard - Clientes Overview</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f77c18",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#23180f",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#181411] dark:text-white font-display overflow-hidden">
+<div class="flex h-screen w-full">
+<!-- Sidebar -->
+<aside class="w-64 flex-shrink-0 flex flex-col border-r border-[#e6e0db] dark:border-white/10 bg-white dark:bg-[#1a120b] transition-all duration-300">
+<!-- Logo Section -->
+<div class="flex h-16 items-center gap-3 px-6 border-b border-[#f5f2f0] dark:border-white/5">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-8" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCpGweZtTY7PnnkgMuJ9i4H2RbK-rOD32rOULOqcNDOrP6tPuTa-M5DCiVvve3XHlebn5LFqmrhMwLvhWfiJ8My3tLJDxV7C8dXWWHgRGQm5gW6kczBeOmSVN7mCqmpl2VpH3EM7poO5GgaWv8RIj2jjbnukF7bw4bOhPZ5vZxdJV5K-USRs-55eCmG5EDrpbzbmQbwBYeuF0Ues9XJvrzQ61KnAfROxD8luP0674iSYARY5_jVSoORkIKfFFsAbvxT9nfkPc-2ZQ");'></div>
+<div class="flex flex-col">
+<h1 class="text-[#181411] dark:text-white text-base font-bold leading-none tracking-tight">NEXUS</h1>
+<p class="text-[#8c735f] dark:text-gray-400 text-xs font-normal mt-0.5">Admin Dashboard</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 overflow-y-auto py-6 px-4 flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#5c4a3d] dark:text-gray-400 hover:bg-[#f5f2f0] dark:hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[#8c735f] group-hover:text-[#181411] dark:text-gray-500 dark:group-hover:text-white">code</span>
+<span class="text-sm font-medium">Desenvolvedores</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-[#f77c18]/10 text-primary dark:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined fill">group</span>
+<span class="text-sm font-bold">Clientes</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#5c4a3d] dark:text-gray-400 hover:bg-[#f5f2f0] dark:hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[#8c735f] group-hover:text-[#181411] dark:text-gray-500 dark:group-hover:text-white">folder_open</span>
+<span class="text-sm font-medium">Projetos</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#5c4a3d] dark:text-gray-400 hover:bg-[#f5f2f0] dark:hover:bg-white/5 transition-colors group" href="#">
+<span class="material-symbols-outlined text-[#8c735f] group-hover:text-[#181411] dark:text-gray-500 dark:group-hover:text-white">database</span>
+<span class="text-sm font-medium">Infraestrutura</span>
+</a>
+</nav>
+<!-- Bottom User Section -->
+<div class="p-4 border-t border-[#f5f2f0] dark:border-white/5">
+<div class="flex items-center gap-3 p-2 rounded-lg hover:bg-[#f5f2f0] dark:hover:bg-white/5 cursor-pointer transition-colors">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-8" data-alt="User Avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAKuZ9FveprJBvIArjQdb_fzTE_6NenPb6E6CF6OUWYimNvMQpXDJLQA5Kmv9Hz6K-SItZaTNgxmdoT2rvLL8nekphf4-4GzKT2XTSabVMEHaXaFVorvJ2fizjIyVkR-yXM6rKDGnY6trwlbKFtmctTMWdFRc8kBLDIoCDxUjLn2AWSZ4BuFiycZ2RVqiBhjlZaeJcXM17AnE73Tz4cmMzt967NUIspMkw7tIpiMeeIBKGoHK_R1Vpjm8DKKY-0ySTiPlCFaEDOJg");'></div>
+<div class="flex flex-col overflow-hidden">
+<span class="text-sm font-medium text-[#181411] dark:text-white truncate">Admin User</span>
+<span class="text-xs text-[#8c735f] dark:text-gray-500 truncate">admin@nexus.com</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-full overflow-hidden relative">
+<!-- Top Header -->
+<header class="h-16 flex items-center justify-between px-6 bg-white dark:bg-[#1a120b] border-b border-[#f5f2f0] dark:border-white/5 flex-shrink-0 z-10">
+<div class="flex items-center gap-2 text-sm">
+<a class="text-[#8c735f] dark:text-gray-400 hover:text-primary transition-colors" href="#">Home</a>
+<span class="material-symbols-outlined text-[#8c735f] dark:text-gray-600 text-[16px]">chevron_right</span>
+<span class="text-[#181411] dark:text-white font-medium">Clientes</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#8c735f] hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 size-2 bg-primary rounded-full border-2 border-white dark:border-[#1a120b]"></span>
+</button>
+<div class="h-8 w-px bg-[#f5f2f0] dark:bg-white/10 mx-1"></div>
+<button class="bg-[#f77c18] hover:bg-[#e0690a] text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors shadow-sm shadow-primary/20">
+                        Profile
+                    </button>
+</div>
+</header>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto p-6 md:p-10">
+<div class="max-w-7xl mx-auto space-y-6">
+<!-- Page Heading & Actions -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div class="flex flex-col gap-1">
+<h2 class="text-[#181411] dark:text-white text-3xl font-black tracking-tight">Gestão de Clientes</h2>
+<p class="text-[#8c735f] dark:text-gray-400 text-sm font-medium">Total Clients: 24 | Active: 22</p>
+</div>
+<button class="flex items-center justify-center gap-2 bg-primary hover:bg-[#e0690a] text-[#181411] text-white px-5 py-2.5 rounded-lg text-sm font-bold transition-all shadow-md shadow-primary/20">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span>Novo Cliente</span>
+</button>
+</div>
+<!-- Search & Filters Bar -->
+<div class="bg-white dark:bg-[#1a120b] p-4 rounded-xl border border-[#e6e0db] dark:border-white/10 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
+<!-- Search Input -->
+<div class="relative w-full md:max-w-md">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#8c735f]">search</span>
+<input class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-[#f8f7f5] dark:bg-white/5 border border-transparent focus:bg-white dark:focus:bg-black focus:border-primary focus:ring-0 text-sm text-[#181411] dark:text-white placeholder-[#8c735f] transition-all outline-none" placeholder="Search by name, email or company..." type="text"/>
+</div>
+<div class="flex items-center gap-3 w-full md:w-auto">
+<!-- Filter Dropdown Trigger -->
+<div class="relative group">
+<button class="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-[#e6e0db] dark:border-white/10 bg-white dark:bg-white/5 text-sm font-medium text-[#181411] dark:text-white hover:bg-[#f8f7f5] dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-[#8c735f] text-[20px]">filter_list</span>
+<span>Filters</span>
+</button>
+</div>
+<div class="h-8 w-px bg-[#e6e0db] dark:bg-white/10 hidden md:block"></div>
+<!-- View Toggle -->
+<div class="flex bg-[#f8f7f5] dark:bg-white/5 p-1 rounded-lg border border-[#e6e0db] dark:border-white/10">
+<button class="p-1.5 rounded bg-white dark:bg-[#2e231b] shadow-sm text-primary transition-all">
+<span class="material-symbols-outlined text-[20px]">grid_view</span>
+</button>
+<button class="p-1.5 rounded hover:bg-white/50 dark:hover:bg-white/10 text-[#8c735f] dark:text-gray-400 transition-all">
+<span class="material-symbols-outlined text-[20px]">table_rows</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Clients Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- Card 1 -->
+<div class="group relative flex flex-col bg-white dark:bg-[#1a120b] border border-[#e6e0db] dark:border-white/10 rounded-xl p-5 hover:border-primary/50 dark:hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300">
+<div class="absolute top-4 right-4">
+<button class="text-[#8c735f] hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<div class="flex items-center gap-4 mb-6">
+<div class="size-14 rounded-xl bg-gray-100 dark:bg-white/10 flex items-center justify-center text-xl font-bold text-primary bg-cover bg-center border border-[#e6e0db] dark:border-white/5" data-alt="Company Logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCACQIElaErKL6dtwgG_5-WYZv8Ry9J146VdVn7L26WJYKhbthNSlOju_ISKKQtZX_BAOJjJnBLOu6VhqDfREsUqDguNAMG-wmBVxcmYskmjWM-mJz11jOzvQqJzrfHaoxr9tiplzUx-sjcAYBeBdFcjfuO_v57pitcLtf7DXQ-Ot0Je0Ko0WxrOEugLUugXazcbCEpKqChmuYrjYVKF6-vj_h9WE9QoulZ4DWs0Jx2ijbMMxKviPb9YFMTBQ1Tz0JHWcSRX1dBKg");'>
+</div>
+<div>
+<h3 class="text-base font-bold text-[#181411] dark:text-white leading-tight">TechNova Solutions</h3>
+<p class="text-xs text-[#8c735f] dark:text-gray-400 mt-1 flex items-center gap-1">
+<span class="size-2 rounded-full bg-green-500"></span> Active
+                                    </p>
+</div>
+</div>
+<div class="space-y-3 mb-6">
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-[#8c735f] text-[20px]">person</span>
+<span class="text-[#181411] dark:text-gray-200">Roberto Almeida</span>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-[#8c735f] text-[20px]">mail</span>
+<span class="text-[#181411] dark:text-gray-200 truncate">contato@technova.com</span>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-[#8c735f] text-[20px]">call</span>
+<span class="text-[#181411] dark:text-gray-200">(11) 98765-4321</span>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-[#8c735f] text-[20px]">location_on</span>
+<span class="text-[#181411] dark:text-gray-200">São Paulo, SP</span>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-[#f5f2f0] dark:border-white/5 flex gap-3">
+<button class="flex-1 px-3 py-2 rounded-lg border border-[#e6e0db] dark:border-white/10 hover:border-primary hover:text-primary text-sm font-bold text-[#5c4a3d] dark:text-gray-300 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+                                    Edit
+                                </button>
+<button class="px-3 py-2 rounded-lg border border-[#e6e0db] dark:border-white/10 hover:border-red-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 text-[#5c4a3d] dark:text-gray-300 transition-colors">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group relative flex flex-col bg-white dark:bg-[#1a120b] border border-[#e6e0db] dark:border-white/10 rounded-xl p-5 hover:border-primary/50 dark:hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300">
+<div class="absolute top-4 right-4">
+<button class="text-[#8c735f] hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<div class="flex items-center gap-4 mb-6">
+<div class="size-14 rounded-xl bg-gray-100 dark:bg-white/10 flex items-center justify-center text-xl font-bold text-primary bg-cover bg-center border border-[#e6e0db] dark:border-white/5" data-alt="Company Logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA_nzqB4n85dBz8V4LJ_fieXrcAiVZ2tgMZDIQIgCto30srPSxgLuo9oJV5Wz8Gj98BWjSHd1uYX-UkAFKNWGcWnytJt7XDG8k0cZivX6Q84Emy7NDFu_FWauE66PvPzebrHtSHBTlt4TAqXp9DEiREZ_3Xrcj-H_tABIl-_y8k3AruM_NwHlG8LFJ4xeUQgjK8fgZbPAYRLkeoXzQMZODIlrAnLCf12E6u-UTXuAF-7-7p0M8fU0VrM-0iuOJ7Zbiz7CcaE3aDYg");'>
+</div>
+<div>
+<h3 class="text-base font-bold text-[#181411] dark:text-white leading-tight">Alpha Corp</h3>
+<p class="text-xs text-[#8c735f] dark:text-gray-400 mt-1 flex items-center gap-1">
+<span class="size-2 rounded-full bg-green-500"></span> Active
+                                    </p>
+</div>
+</div>
+<div class="space-y-3 mb-6">
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-[#8c735f] text-[20px]">person</span>
+<span class="text-[#181411] dark:text-gray-200">Mariana Souza</span>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-[#8c735f] text-[20px]">mail</span>
+<span class="text-[#181411] dark:text-gray-200 truncate">mariana@alphacorp.br</span>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-[#8c735f] text-[20px]">call</span>
+<span class="text-[#181411] dark:text-gray-200">(21) 99888-7766</span>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-[#8c735f] text-[20px]">location_on</span>
+<span class="text-[#181411] dark:text-gray-200">Rio de Janeiro, RJ</span>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-[#f5f2f0] dark:border-white/5 flex gap-3">
+<button class="flex-1 px-3 py-2 rounded-lg border border-[#e6e0db] dark:border-white/10 hover:border-primary hover:text-primary text-sm font-bold text-[#5c4a3d] dark:text-gray-300 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+                                    Edit
+                                </button>
+<button class="px-3 py-2 rounded-lg border border-[#e6e0db] dark:border-white/10 hover:border-red-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 text-[#5c4a3d] dark:text-gray-300 transition-colors">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group relative flex flex-col bg-white dark:bg-[#1a120b] border border-[#e6e0db] dark:border-white/10 rounded-xl p-5 hover:border-primary/50 dark:hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300">
+<div class="absolute top-4 right-4">
+<button class="text-[#8c735f] hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<div class="flex items-center gap-4 mb-6">
+<div class="size-14 rounded-xl bg-gray-100 dark:bg-white/10 flex items-center justify-center text-xl font-bold text-primary bg-cover bg-center border border-[#e6e0db] dark:border-white/5" data-alt="Company Logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC4cVflmOLM6hsdorgzB1mxlN6OXJ_9nmoVZUWK0SbDRHpCzGGsgBJU54lHKODjDzjpIeWCwnPziyFZ4jR7kmYSKztc5grkz8iqgGakIjgf7QvYOHPyBDzWf5s3L1bhSLOuA7LfoszKIuaEWkDlHYEGXS7hjOjSxkzYzNa-ronNbXwkX2lwvxX3cEGXzx5mjIjPdNaLOfPimxN_0O47GylQyOIghO9_wkMdc3-qemttR2BOv2QMpE_iOLzM9pwTS0WfS2pHMSG-QQ");'>
+</div>
+<div>
+<h3 class="text-base font-bold text-[#181411] dark:text-white leading-tight">Vortex Dynamics</h3>
+<p class="text-xs text-[#8c735f] dark:text-gray-400 mt-1 flex items-center gap-1">
+<span class="size-2 rounded-full bg-orange-400"></span> Pending
+                                    </p>
+</div>
+</div>
+<div class="space-y-3 mb-6">
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-[#8c735f] text-[20px]">person</span>
+<span class="text-[#181411] dark:text-gray-200">Carlos Mendes</span>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-[#8c735f] text-[20px]">mail</span>
+<span class="text-[#181411] dark:text-gray-200 truncate">carlos@vortex.io</span>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-[#8c735f] text-[20px]">call</span>
+<span class="text-[#181411] dark:text-gray-200">(31) 99123-4567</span>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-[#8c735f] text-[20px]">location_on</span>
+<span class="text-[#181411] dark:text-gray-200">Belo Horizonte, MG</span>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-[#f5f2f0] dark:border-white/5 flex gap-3">
+<button class="flex-1 px-3 py-2 rounded-lg border border-[#e6e0db] dark:border-white/10 hover:border-primary hover:text-primary text-sm font-bold text-[#5c4a3d] dark:text-gray-300 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+                                    Edit
+                                </button>
+<button class="px-3 py-2 rounded-lg border border-[#e6e0db] dark:border-white/10 hover:border-red-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 text-[#5c4a3d] dark:text-gray-300 transition-colors">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="group relative flex flex-col bg-white dark:bg-[#1a120b] border border-[#e6e0db] dark:border-white/10 rounded-xl p-5 hover:border-primary/50 dark:hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300">
+<div class="absolute top-4 right-4">
+<button class="text-[#8c735f] hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<div class="flex items-center gap-4 mb-6">
+<div class="size-14 rounded-xl bg-gray-100 dark:bg-white/10 flex items-center justify-center text-xl font-bold text-primary bg-cover bg-center border border-[#e6e0db] dark:border-white/5" data-alt="Company Logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAEpllv9UgaiQq2FXhqeGUToPOHOyhaxlO8OBJIFTBdCU1Dsp0n7UGAI56tggTskf5rfbg91-E1ZOTu6eU1DIvFMrkPbUiJOczlEZCZaQMHR-kXE2wzTz2U7aUtWN0y9En5N7N1Hujmcs92McdsSEO4IpzW-ce369WWOOW2WxJDCQsvyEVJvjlz7xySHfIO5PB6umPe_XDbWrMD2ciGvW3FL55QhV0wVsHcbF_oo_vS-Jt0isCl2nLXTjNOtLNrqNI7g9-4zLl_SA");'>
+</div>
+<div>
+<h3 class="text-base font-bold text-[#181411] dark:text-white leading-tight">NextGen Retail</h3>
+<p class="text-xs text-[#8c735f] dark:text-gray-400 mt-1 flex items-center gap-1">
+<span class="size-2 rounded-full bg-green-500"></span> Active
+                                    </p>
+</div>
+</div>
+<div class="space-y-3 mb-6">
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-[#8c735f] text-[20px]">person</span>
+<span class="text-[#181411] dark:text-gray-200">Fernanda Lima</span>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-[#8c735f] text-[20px]">mail</span>
+<span class="text-[#181411] dark:text-gray-200 truncate">fernanda@nextgen.com</span>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-[#8c735f] text-[20px]">call</span>
+<span class="text-[#181411] dark:text-gray-200">(41) 99777-1122</span>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-[#8c735f] text-[20px]">location_on</span>
+<span class="text-[#181411] dark:text-gray-200">Curitiba, PR</span>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-[#f5f2f0] dark:border-white/5 flex gap-3">
+<button class="flex-1 px-3 py-2 rounded-lg border border-[#e6e0db] dark:border-white/10 hover:border-primary hover:text-primary text-sm font-bold text-[#5c4a3d] dark:text-gray-300 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+                                    Edit
+                                </button>
+<button class="px-3 py-2 rounded-lg border border-[#e6e0db] dark:border-white/10 hover:border-red-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 text-[#5c4a3d] dark:text-gray-300 transition-colors">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+<!-- Card Add New Placeholder -->
+<div class="flex flex-col items-center justify-center bg-[#f8f7f5] dark:bg-white/5 border-2 border-dashed border-[#e6e0db] dark:border-white/10 rounded-xl p-5 hover:border-primary hover:bg-[#fff5ee] dark:hover:bg-[#fff5ee]/5 cursor-pointer transition-all duration-300 min-h-[300px]">
+<div class="size-16 rounded-full bg-white dark:bg-white/10 flex items-center justify-center mb-4 shadow-sm">
+<span class="material-symbols-outlined text-primary text-3xl">add</span>
+</div>
+<h3 class="text-lg font-bold text-[#181411] dark:text-white mb-1">Add New Client</h3>
+<p class="text-sm text-[#8c735f] dark:text-gray-400 text-center">Register a new company into the system</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
