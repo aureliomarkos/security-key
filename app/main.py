@@ -131,7 +131,7 @@ app = FastAPI(
     - **Compartilhamento** - Compartilhe itens com familiares
     - **Criptografia** - Campos sensíveis são criptografados
     """,
-    root_path="/security"
+    root_path="/security",
     version=settings.APP_VERSION,
     lifespan=lifespan,
     docs_url="/docs",
