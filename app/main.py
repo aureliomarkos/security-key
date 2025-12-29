@@ -2,23 +2,25 @@
 Security Key - Cofre Digital Familiar
 API FastAPI para gerenciar senhas e documentos da família
 """
+
 import os
-from pathlib import Path
 from contextlib import asynccontextmanager
+from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.config import get_settings
 from app.database import create_tables
 from app.routers import (
     auth_router,
-    usuarios_router,
+    campos_router,
     categorias_router,
     itens_router,
-    campos_router,
-    permissoes_router
+    permissoes_router,
+    usuarios_router,
 )
 
 settings = get_settings()
@@ -36,36 +38,78 @@ async def lifespan(app: FastAPI):
     # Startup: Cria tabelas
     create_tables()
     print("✅ Banco de dados inicializado")
-    
+
     # Cria categorias padrão
     from app.database import SessionLocal
     from app.models.categoria import Categoria
-    
+
     db = SessionLocal()
     try:
         categorias_padrao = [
-            {"nome": "Bancos", "icone": "bank", "cor": "#10b981", "descricao": "Contas bancárias e cartões"},
-            {"nome": "Redes Sociais", "icone": "share", "cor": "#6366f1", "descricao": "Facebook, Instagram, Twitter, etc"},
-            {"nome": "Documentos", "icone": "file", "cor": "#f59e0b", "descricao": "RG, CPF, CNH e outros documentos"},
-            {"nome": "Saúde", "icone": "heart", "cor": "#ef4444", "descricao": "Planos de saúde, convênios"},
-            {"nome": "Emails", "icone": "mail", "cor": "#3b82f6", "descricao": "Contas de email"},
-            {"nome": "Trabalho", "icone": "briefcase", "cor": "#8b5cf6", "descricao": "Acessos corporativos"},
-            {"nome": "Streaming", "icone": "tv", "cor": "#ec4899", "descricao": "Netflix, Spotify, Disney+, etc"},
-            {"nome": "Outros", "icone": "folder", "cor": "#6b7280", "descricao": "Outros itens"},
+            {
+                "nome": "Bancos",
+                "icone": "bank",
+                "cor": "#10b981",
+                "descricao": "Contas bancárias e cartões",
+            },
+            {
+                "nome": "Redes Sociais",
+                "icone": "share",
+                "cor": "#6366f1",
+                "descricao": "Facebook, Instagram, Twitter, etc",
+            },
+            {
+                "nome": "Documentos",
+                "icone": "file",
+                "cor": "#f59e0b",
+                "descricao": "RG, CPF, CNH e outros documentos",
+            },
+            {
+                "nome": "Saúde",
+                "icone": "heart",
+                "cor": "#ef4444",
+                "descricao": "Planos de saúde, convênios",
+            },
+            {
+                "nome": "Emails",
+                "icone": "mail",
+                "cor": "#3b82f6",
+                "descricao": "Contas de email",
+            },
+            {
+                "nome": "Trabalho",
+                "icone": "briefcase",
+                "cor": "#8b5cf6",
+                "descricao": "Acessos corporativos",
+            },
+            {
+                "nome": "Streaming",
+                "icone": "tv",
+                "cor": "#ec4899",
+                "descricao": "Netflix, Spotify, Disney+, etc",
+            },
+            {
+                "nome": "Outros",
+                "icone": "folder",
+                "cor": "#6b7280",
+                "descricao": "Outros itens",
+            },
         ]
-        
+
         for cat_data in categorias_padrao:
-            existing = db.query(Categoria).filter(Categoria.nome == cat_data["nome"]).first()
+            existing = (
+                db.query(Categoria).filter(Categoria.nome == cat_data["nome"]).first()
+            )
             if not existing:
                 categoria = Categoria(**cat_data)
                 db.add(categoria)
                 db.commit()
-                print("✅ Categorias padrão criadas")
+            print("✅ Categorias padrão criadas")
     finally:
         db.close()
-    
+
     yield
-    
+
     # Shutdown
     print("👋 Encerrando aplicação...")
 
@@ -75,11 +119,11 @@ app = FastAPI(
     title=settings.APP_NAME,
     description="""
     ## 🔐 Security Key - Cofre Digital Familiar
-    
+
     API para gerenciar senhas, documentos e informações sensíveis da família.
-    
+
     ### Funcionalidades:
-    
+
     - **Autenticação** - Registro e login com JWT
     - **Categorias** - Organize seus itens por tipo
     - **Itens do Cofre** - Armazene senhas, documentos e informações
@@ -87,10 +131,11 @@ app = FastAPI(
     - **Compartilhamento** - Compartilhe itens com familiares
     - **Criptografia** - Campos sensíveis são criptografados
     """,
+    root_path="/security"
     version=settings.APP_VERSION,
     lifespan=lifespan,
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
 )
 
 # Configuração de CORS
@@ -133,7 +178,7 @@ def api_info():
         "app": settings.APP_NAME,
         "version": settings.APP_VERSION,
         "docs": "/docs",
-        "status": "online"
+        "status": "online",
     }
 
 
