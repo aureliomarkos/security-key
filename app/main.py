@@ -103,8 +103,8 @@ async def lifespan(app: FastAPI):
             if not existing:
                 categoria = Categoria(**cat_data)
                 db.add(categoria)
-                db.commit()
-            print("✅ Categorias padrão criadas")
+        db.commit()
+        print("✅ Categorias padrão criadas")
     finally:
         db.close()
 
@@ -131,7 +131,7 @@ app = FastAPI(
     - **Compartilhamento** - Compartilhe itens com familiares
     - **Criptografia** - Campos sensíveis são criptografados
     """,
-    root_path="/security",
+    # root_path="/security",
     version=settings.APP_VERSION,
     lifespan=lifespan,
     docs_url="/docs",
