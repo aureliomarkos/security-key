@@ -9,6 +9,7 @@ from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -131,7 +132,6 @@ app = FastAPI(
     - **Compartilhamento** - Compartilhe itens com familiares
     - **Criptografia** - Campos sensíveis são criptografados
     """,
-    #root_path="/security",
     version=settings.APP_VERSION,
     lifespan=lifespan,
     docs_url="/docs",
@@ -139,16 +139,19 @@ app = FastAPI(
 )
 
 # Configuração de CORS
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=["*"])
+"""
 app.add_middleware(
     CORSMiddleware,
+    allowed_hosts=["*"],
     allow_origins=["*"],  # Em produção, especifique as origens permitidas
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
+"""
 # Monta arquivos estáticos
-app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
+app.mount("/static/", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 
 # Registra os routers
 app.include_router(auth_router)
