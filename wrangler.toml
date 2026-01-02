@@ -1,6 +1,6 @@
 name = "Security-Key"
 main = "app/main.py" # Onde está o seu app FastAPI
-compatibility_date = "2026-01-02"
+compatibility_date = "2025-08-01"
 
 [vars]
 # Aqui você pode colocar variáveis que não são secretas
