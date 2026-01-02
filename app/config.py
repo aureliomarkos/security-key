@@ -13,20 +13,20 @@ class Settings(BaseSettings):
     """Configurações carregadas de variáveis de ambiente"""
     
     # Aplicação
-    APP_NAME: str = "Security Key"
-    APP_VERSION: str = "1.0.0"
-    DEBUG: bool = False
+    APP_NAME: str = os.getenv("APP_NAME", "Security Key")
+    APP_VERSION: str = os.getenv("APP_VERSION", "1.0.0")
+    DEBUG: bool = os.getenv("DEBUG", "False").lower() in ["true", "1", "t"]
     
     # Banco de dados
-    DATABASE_URL: str = os.getenv("DATABASE_URL")
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "")
     
     # JWT
-    SECRET_KEY: str = os.getenv("SECRET_KEY")
-    ALGORITHM: str = os.getenv("ALGORITHM")
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "")
+    ALGORITHM: str = os.getenv("ALGORITHM", "HS256")
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30)
     
     # Criptografia de campos sensíveis
-    ENCRYPTION_KEY: str = os.getenv("ENCRYPTION_KEY")
+    ENCRYPTION_KEY: str = os.getenv("ENCRYPTION_KEY", "")
     
     class Config:
         env_file = ".env"
