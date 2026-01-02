@@ -277,7 +277,7 @@ function renderItems() {
 
     let html = filtered.map(item => {
         const cat = categories.find(c => c.id === item.category_id);
-        return `<div class="group relative flex flex-col bg-white dark:bg-[#1a120b] border border-[#e6e0db] dark:border-white/10 rounded-xl p-5 hover:border-primary/50 hover:shadow-lg transition-all">
+        return `<div class="group relative flex flex-col bg-white dark:bg-card-dark border border-[#e6e0db] dark:border-white/10 rounded-xl p-5 hover:border-primary/50 hover:shadow-lg transition-all">
             <div class="absolute top-4 right-4 flex gap-2">
                 ${item.favorito ? '<span class="material-symbols-outlined fill text-primary text-[20px]">star</span>' : ''}
                 <button onclick="showShareModal('${item.id}')" class="text-[#8c735f] hover:text-primary" title="Compartilhar"><span class="material-symbols-outlined text-[20px]">share</span></button>

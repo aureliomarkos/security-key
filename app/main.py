@@ -158,12 +158,24 @@ app.include_router(campos_router)
 app.include_router(permissoes_router)
 
 
+from fastapi import Request
+
 @app.get("/", response_class=HTMLResponse, tags=["Dashboard"])
-def dashboard():
+def dashboard(request: Request):
     """
     Dashboard principal - Interface do usuário
+    Detecta se é mobile e retorna o layout correspondente.
     """
-    template_path = BASE_DIR / "templates" / "dashboard.html"
+    user_agent = request.headers.get("User-Agent", "").lower()
+    is_mobile = any(device in user_agent for device in ["mobile", "android", "iphone", "ipad"])
+    
+    template_name = "dashboard_mobile.html" if is_mobile else "dashboard.html"
+    template_path = BASE_DIR / "templates" / template_name
+    
+    # Se o arquivo mobile ainda não existe, cai de volta para o padrão
+    if not template_path.exists():
+        template_path = BASE_DIR / "templates" / "dashboard.html"
+        
     with open(template_path, "r", encoding="utf-8") as f:
         return f.read()
 
