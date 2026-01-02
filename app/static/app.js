@@ -226,7 +226,7 @@ window.deleteCategory = async function (id) {
 window.updateIconPreview = function () {
     const icon = document.getElementById('catIcone').value || 'category';
     const preview = document.querySelector('#iconPreview span');
-    if (preview) preview.textContent = icon;
+    if (preview) preview.textContent = getIcon(icon);
 
     const color = document.getElementById('catCor').value;
     document.getElementById('colorHex').textContent = color;
@@ -234,8 +234,23 @@ window.updateIconPreview = function () {
 };
 
 function getIcon(name) {
-    const icons = { bank: 'account_balance', share: 'share', file: 'description', heart: 'favorite', mail: 'mail', briefcase: 'work', tv: 'tv', folder: 'folder' };
-    return icons[name] || 'folder';
+    if (!name) return 'folder';
+    const cleanName = name.trim().toLowerCase().replace(/\s+/g, '_');
+    const icons = {
+        bank: 'account_balance',
+        file: 'description',
+        heart: 'favorite',
+        briefcase: 'work',
+        share: 'share',
+        mail: 'mail',
+        tv: 'tv',
+        folder: 'folder',
+        social: 'public',
+        password: 'key',
+        login: 'login',
+        card: 'credit_card'
+    };
+    return icons[cleanName] || cleanName;
 }
 
 function populateCategorySelect() {
@@ -681,6 +696,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 renderCategoriesList();
+                renderCategories();
+                renderItems();
                 prepareNewCategory();
                 alert('Categoria salva!');
 
