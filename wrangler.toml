@@ -13,4 +13,4 @@ ACCESS_TOKEN_EXPIRE_MINUTES=30
 # Se o seu projeto usa compatibilidade com Python
 [[python_workers]]
 handler = "app" # O nome da variável FastAPI no seu código (ex: app = FastAPI())
-compatibility_flags = [ "python_workers" ]
+WRANGLER_SEND_METRICS="false"
