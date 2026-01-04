@@ -277,12 +277,18 @@ function renderItems() {
 
     let html = filtered.map(item => {
         const cat = categories.find(c => c.id === item.category_id);
+        const isShared = item.user_id !== currentUser.id;
+
         return `<div class="group relative flex flex-col bg-white dark:bg-card-dark border border-[#e6e0db] dark:border-white/10 rounded-xl p-5 hover:border-primary/50 hover:shadow-lg transition-all">
             <div class="absolute top-4 right-4 flex gap-2">
                 ${item.favorito ? '<span class="material-symbols-outlined fill text-primary text-[20px]">star</span>' : ''}
+                ${!isShared ? `
                 <button onclick="showShareModal('${item.id}')" class="text-[#8c735f] hover:text-primary" title="Compartilhar"><span class="material-symbols-outlined text-[20px]">share</span></button>
                 <button onclick="editItem('${item.id}')" class="text-[#8c735f] hover:text-primary" title="Editar"><span class="material-symbols-outlined text-[20px]">edit</span></button>
                 <button onclick="deleteItem('${item.id}')" class="text-[#8c735f] hover:text-red-500" title="Excluir"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+                ` : (item.pode_editar ? `
+                <button onclick="editItem('${item.id}')" class="text-[#8c735f] hover:text-primary" title="Editar"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+                ` : '')}
             </div>
             <div class="flex items-center gap-4 mb-4">
                 <div class="size-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background: ${cat?.cor || '#6366f1'}20">
@@ -291,6 +297,7 @@ function renderItems() {
                 <div class="flex-1 min-w-0 pr-20">
                     <h3 class="text-sm font-semibold text-[#181411] dark:text-white line-clamp-2 leading-tight mb-0.5" title="${item.titulo}">${item.titulo}</h3>
                     <p class="text-[11px] text-[#8c735f] dark:text-gray-400 truncate">${cat?.nome || 'Sem categoria'}</p>
+                    ${isShared ? `<p class="text-[10px] text-primary font-bold mt-1">Dono: ${item.dono_nome}</p>` : ''}
                 </div>
             </div>
             <div class="space-y-2 flex-1 max-h-[140px] overflow-y-auto pr-2 custom-scrollbar">
@@ -485,7 +492,7 @@ async function loadItemPermissions(itemId) {
         const availableUsers = allUsers.filter(u => !sharedUserIds.includes(u.id) && u.id !== currentUser.id);
 
         selectEl.innerHTML = '<option value="">Selecione um usuário...</option>' +
-            availableUsers.map(u => `<option value="${u.id}">${u.nome} (${u.email})</option>`).join('');
+            availableUsers.map(u => `<option value="${u.id}">${u.nome}</option>`).join('');
 
     } catch (err) {
         console.error('Erro ao carregar permissões:', err);

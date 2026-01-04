@@ -82,12 +82,20 @@ def listar_itens(
     Lista os itens do cofre do usuário logado.
     Inclui itens próprios e compartilhados.
     """
-    # Itens próprios
+    # IDs de itens compartilhados com o usuário
+    shared_item_ids = db.query(Permissao.item_id).filter(
+        Permissao.shared_with_user_id == current_user.id,
+        Permissao.deleted_at.is_(None)
+    ).all()
+    shared_item_ids = [r[0] for r in shared_item_ids]
+
+    # Itens próprios e compartilhados
     query = db.query(ItemCofre).options(
         joinedload(ItemCofre.campos),
-        joinedload(ItemCofre.categoria)
+        joinedload(ItemCofre.categoria),
+        joinedload(ItemCofre.usuario)
     ).filter(
-        ItemCofre.user_id == current_user.id,
+        (ItemCofre.user_id == current_user.id) | (ItemCofre.id.in_(shared_item_ids)),
         ItemCofre.deleted_at.is_(None)
     )
     
@@ -103,8 +111,23 @@ def listar_itens(
     
     itens = query.order_by(ItemCofre.favorito.desc(), ItemCofre.titulo).offset(skip).limit(limit).all()
     
-    # Descriptografa valores sensíveis
+    # Prepara permissões para consulta rápida
+    permissoes_map = {p.item_id: p.nivel_acesso for p in db.query(Permissao).filter(
+        Permissao.shared_with_user_id == current_user.id,
+        Permissao.deleted_at.is_(None)
+    ).all()}
+
+    # Configura campos adicionais e descriptografa
     for item in itens:
+        item.dono_nome = item.usuario.nome if item.user_id != current_user.id else "Você"
+        
+        # Define se pode editar
+        if item.user_id == current_user.id:
+            item.pode_editar = True
+        else:
+            nivel = permissoes_map.get(item.id)
+            item.pode_editar = (nivel == NivelAcesso.EDITAR.value)
+
         for campo in item.campos:
             if campo.is_sensitive and campo.value:
                 campo.value = CryptoService.decrypt(campo.value)
@@ -208,7 +231,8 @@ def obter_item(
     """
     item = db.query(ItemCofre).options(
         joinedload(ItemCofre.campos),
-        joinedload(ItemCofre.categoria)
+        joinedload(ItemCofre.categoria),
+        joinedload(ItemCofre.usuario)
     ).filter(
         ItemCofre.id == item_id,
         ItemCofre.deleted_at.is_(None)
@@ -221,12 +245,25 @@ def obter_item(
         )
     
     # Verifica acesso
-    if not check_item_access(db, item_id, current_user.id):
+    permissao = db.query(Permissao).filter(
+        Permissao.item_id == item_id,
+        Permissao.shared_with_user_id == current_user.id,
+        Permissao.deleted_at.is_(None)
+    ).first()
+
+    if item.user_id != current_user.id and not permissao:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Acesso negado"
         )
     
+    # Preenche campos de display
+    item.dono_nome = item.usuario.nome if item.user_id != current_user.id else "Você"
+    if item.user_id == current_user.id:
+        item.pode_editar = True
+    else:
+        item.pode_editar = (permissao.nivel_acesso == NivelAcesso.EDITAR.value)
+
     # Descriptografa valores sensíveis
     for campo in item.campos:
         if campo.is_sensitive and campo.value:

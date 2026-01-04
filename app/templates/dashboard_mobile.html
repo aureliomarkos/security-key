@@ -46,6 +46,33 @@
             scrollbar-width: none;
         }
 
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+        }
+
+        .dark .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 4px;
+        }
+
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #4b5563;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
@@ -76,6 +103,12 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+
+        /* Fix for dark mode dropdown options contrast */
+        .dark select option {
+            background-color: #1e1b18;
+            color: rgba(255, 255, 255, 0.8);
         }
     </style>
 </head>
@@ -394,41 +427,45 @@
     </div>
 
     <!-- SHARE MODAL MOBILE -->
-    <div id="shareModal" class="fixed inset-0 z-[60] hidden bg-black/50 modal-backdrop p-4">
-        <div class="w-full max-w-sm bg-white dark:bg-card-dark rounded-custom shadow-2xl p-6 fade-in mt-20">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-bold">Compartilhar</h2>
-                <button onclick="hideShareModal()" class="text-slate-400"><span
-                        class="material-symbols-outlined">close</span></button>
+    <div id="shareModal" class="fixed inset-0 z-[60] hidden bg-black/50 modal-backdrop p-4 items-center justify-center">
+        <div class="w-full max-w-sm bg-white dark:bg-card-dark rounded-custom shadow-2xl fade-in overflow-hidden">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold">Compartilhar</h2>
+                    <button onclick="hideShareModal()" class="text-slate-400"><span
+                            class="material-symbols-outlined">close</span></button>
+                </div>
+
+                <input type="hidden" id="shareItemId" />
+
+                <div class="mb-2 space-y-3 max-h-40 overflow-y-auto no-scrollbar" id="sharedUsersList">
+                    <!-- Shared users -->
+                </div>
             </div>
 
-            <input type="hidden" id="shareItemId" />
-
-            <div class="mb-6 space-y-3 max-h-40 overflow-y-auto no-scrollbar" id="sharedUsersList">
-                <!-- Shared users -->
-            </div>
-
-            <div class="space-y-4 pt-4 border-t border-slate-100 dark:border-white/5">
+            <!-- Adicionar usuário -->
+            <div class="border-t border-slate-100 dark:border-white/5 p-6 space-y-4">
+                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Adicionar pessoa</h3>
                 <div class="space-y-1.5">
-                    <label class="text-sm font-semibold">Pessoa</label>
+                    <label class="text-xs font-semibold opacity-60">Pessoa</label>
                     <select id="shareUserSelect"
-                        class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 outline-none"></select>
+                        class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 outline-none focus:ring-1 focus:ring-primary"></select>
                 </div>
                 <div class="space-y-1.5">
-                    <label class="text-sm font-semibold">Acesso</label>
+                    <label class="text-xs font-semibold opacity-60">Nível de Acesso</label>
                     <select id="shareAccessLevel"
-                        class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 outline-none">
+                        class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 outline-none focus:ring-1 focus:ring-primary">
                         <option value="visualizar">Visualizar</option>
                         <option value="editar">Editar</option>
                     </select>
                 </div>
                 <button onclick="addShare()"
-                    class="w-full bg-primary text-white py-4 rounded-xl font-bold">Compartilhar</button>
+                    class="w-full bg-primary text-white py-4 rounded-xl font-bold shadow-lg shadow-primary/20">Compartilhar</button>
             </div>
         </div>
     </div>
 
-    <script src="./static/app_mobile.js?v=1"></script>
+    <script src="./static/app_mobile.js?v=13"></script>
 </body>
 
 </html>

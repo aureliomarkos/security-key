@@ -48,6 +48,8 @@ class ItemCofreCompleto(ItemCofreResponse):
     """Schema de resposta completa com campos e categoria"""
     campos: List[CampoDinamicoResponse] = []
     categoria: Optional[CategoriaResponse] = None
+    dono_nome: Optional[str] = None
+    pode_editar: bool = True
     
     class Config:
         from_attributes = True

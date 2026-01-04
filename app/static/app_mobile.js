@@ -231,69 +231,101 @@ async function loadItems() {
 function renderItems() {
     const grid = document.getElementById('itemsGrid');
     if (!grid) return;
-    const search = document.getElementById('searchInput').value.toLowerCase();
+    const searchEl = document.getElementById('searchInput');
+    const search = searchEl ? searchEl.value.toLowerCase() : '';
     const filtered = items.filter(i => i.titulo.toLowerCase().includes(search));
 
-    grid.innerHTML = filtered.map(item => {
+    let html = filtered.map(item => {
         const cat = categories.find(c => c.id === item.category_id);
         const iconColor = cat?.cor || '#f77c18';
+        const isShared = item.user_id !== currentUser.id;
+
         return `
-        <div class="group relative flex items-center justify-between p-4 bg-white dark:bg-card-dark rounded-[24px] border border-slate-100 dark:border-white/5 shadow-sm active:scale-[0.99] transition-all duration-200" onclick="toggleItemView('${item.id}')">
-            <div class="flex items-center gap-4 flex-1">
+        <div class="group relative flex flex-col bg-white dark:bg-card-dark rounded-[24px] border border-slate-100 dark:border-white/5 shadow-sm active:scale-[0.99] transition-all duration-200 p-5">
+            <div class="absolute top-4 right-4 flex gap-1">
+                ${item.favorito ? '<span class="material-symbols-outlined filled text-primary text-[20px]">star</span>' : ''}
+                ${!isShared ? `
+                <button onclick="event.stopPropagation(); showShareModal('${item.id}')" class="size-8 flex items-center justify-center rounded-full text-slate-400 hover:text-primary" title="Compartilhar"><span class="material-symbols-outlined text-[18px]">share</span></button>
+                <button onclick="event.stopPropagation(); editItem('${item.id}')" class="size-8 flex items-center justify-center rounded-full text-slate-400 hover:text-primary" title="Editar"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+                <button onclick="event.stopPropagation(); deleteItem('${item.id}')" class="size-8 flex items-center justify-center rounded-full text-slate-400 hover:text-red-500" title="Excluir"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+                ` : (item.pode_editar ? `
+                <button onclick="event.stopPropagation(); editItem('${item.id}')" class="size-8 flex items-center justify-center rounded-full text-slate-400 hover:text-primary" title="Editar"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+                ` : '')}
+            </div>
+            
+            <div class="flex items-center gap-4 mb-4 pr-32">
                 <div class="flex items-center justify-center size-12 rounded-2xl shrink-0" style="background-color: ${iconColor}1a; color: ${iconColor}">
                     <span class="material-symbols-outlined">${getIcon(cat?.icone)}</span>
                 </div>
                 <div class="flex flex-col min-w-0">
-                    <h3 class="text-base font-semibold text-slate-900 dark:text-white truncate">${item.titulo}</h3>
-                    <div class="flex items-center gap-2">
-                        <span class="size-1.5 rounded-full" style="background-color: ${iconColor}"></span>
-                        <span class="text-xs font-medium text-slate-500 dark:text-white/50">${cat?.nome || 'Sem categoria'}</span>
+                    <h3 class="text-sm font-semibold text-slate-900 dark:text-white line-clamp-2 leading-tight" title="${item.titulo}">
+                        ${item.titulo.length > 15 ? item.titulo.substring(0, 15) + '<br>' + item.titulo.substring(15, 30) + (item.titulo.length > 30 ? '...' : '') : item.titulo}
+                    </h3>
+                    <div class="flex flex-col gap-0.5">
+                        <div class="flex items-center gap-2">
+                            <span class="size-1.5 rounded-full" style="background-color: ${iconColor}"></span>
+                            <span class="text-xs font-medium text-slate-500 dark:text-white/50">${cat?.nome || 'Sem categoria'}</span>
+                        </div>
+                        ${isShared ? `<span class="text-[10px] text-primary font-bold">Respon: ${item.dono_nome}</span>` : ''}
                     </div>
                 </div>
             </div>
-            <div class="flex items-center gap-1 pl-2">
-                <button onclick="event.stopPropagation(); showShareModal('${item.id}')" class="size-9 flex items-center justify-center rounded-full text-slate-400 hover:text-primary"><span class="material-symbols-outlined text-[20px]">share</span></button>
-                <button onclick="event.stopPropagation(); editItem('${item.id}')" class="size-9 flex items-center justify-center rounded-full text-slate-400 hover:text-primary"><span class="material-symbols-outlined text-[20px]">edit</span></button>
-                <button onclick="event.stopPropagation(); deleteItem('${item.id}')" class="size-9 flex items-center justify-center rounded-full text-slate-400 hover:text-red-500"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+
+            <div class="space-y-2 flex-1 max-h-[160px] overflow-y-auto pr-2 custom-scrollbar">
+                ${(item.campos || []).map((c, idx) => {
+            const fieldId = `field_${item.id}_${idx}`;
+            const escapedValue = (c.value || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            if (c.is_sensitive) {
+                return `
+                        <div class="flex items-center gap-2 text-sm border-b border-slate-100 dark:border-white/5 py-1.5 last:border-0">
+                            <span class="text-slate-400 text-xs w-20 truncate shrink-0">${c.label}:</span>
+                            <span id="${fieldId}" class="text-slate-700 dark:text-gray-200 truncate flex-1 font-medium" data-value="${escapedValue}" data-hidden="true">••••••••</span>
+                            <button onclick="togglePassword('${fieldId}')" class="text-slate-400 hover:text-primary shrink-0">
+                                <span id="${fieldId}_icon" class="material-symbols-outlined text-[18px]">visibility</span>
+                            </button>
+                            <button onclick="copyField('${escapedValue}')" class="text-slate-400 hover:text-primary shrink-0">
+                                <span class="material-symbols-outlined text-[18px]">content_copy</span>
+                            </button>
+                        </div>`;
+            } else {
+                return `
+                        <div class="flex items-center gap-2 text-sm border-b border-slate-100 dark:border-white/5 py-1.5 last:border-0">
+                            <span class="text-slate-400 text-xs w-20 truncate shrink-0">${c.label}:</span>
+                            <span class="text-slate-700 dark:text-gray-200 truncate flex-1 font-medium">${c.value || '-'}</span>
+                            <button onclick="copyField('${escapedValue}')" class="text-slate-400 hover:text-primary shrink-0">
+                                <span class="material-symbols-outlined text-[18px]">content_copy</span>
+                            </button>
+                        </div>`;
+            }
+        }).join('')}
             </div>
-        </div>
-        <!-- Item Details (Expandable) -->
-        <div id="details-${item.id}" class="hidden px-6 py-4 bg-slate-50 dark:bg-white/5 rounded-[24px] -mt-2 mb-2 border-x border-b border-slate-100 dark:border-white/5">
-            <div class="space-y-3">
-                ${(item.campos || []).map((c, idx) => `
-                    <div class="flex items-center justify-between py-2 border-b border-slate-200 dark:border-white/5 last:border-0">
-                        <div class="flex-1 min-w-0 pr-4">
-                            <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">${c.label}</p>
-                            <p class="text-sm font-medium truncate" id="val-${item.id}-${idx}">${c.is_sensitive ? '••••••••' : c.value}</p>
-                        </div>
-                        <div class="flex gap-2">
-                            ${c.is_sensitive ? `<button onclick="toggleValue('${item.id}', ${idx}, '${(c.value || '').replace(/'/g, "\\'")}')" class="text-slate-400"><span class="material-symbols-outlined text-lg">visibility</span></button>` : ''}
-                            <button onclick="copyToClipboard('${(c.value || '').replace(/'/g, "\\'")}')" class="text-slate-400"><span class="material-symbols-outlined text-lg">content_copy</span></button>
-                        </div>
-                    </div>
-                `).join('')}
-                ${item.nota_adicional ? `<p class="text-xs text-slate-400 mt-2">${item.nota_adicional}</p>` : ''}
-            </div>
-        </div>
-        `;
+            ${item.nota_adicional ? `<p class="mt-3 pt-3 border-t border-slate-100 dark:border-white/5 text-[11px] text-slate-400 line-clamp-2">${item.nota_adicional}</p>` : ''}
+        </div>`;
     }).join('');
+
+    grid.innerHTML = html;
 }
 
-window.toggleItemView = function (id) {
-    const el = document.getElementById(`details-${id}`);
-    if (el) el.classList.toggle('hidden');
-};
+window.togglePassword = function (fieldId) {
+    const field = document.getElementById(fieldId);
+    const icon = document.getElementById(fieldId + '_icon');
+    if (!field || !icon) return;
 
-window.toggleValue = function (itemId, idx, value) {
-    const el = document.getElementById(`val-${itemId}-${idx}`);
-    if (el.textContent === '••••••••') {
-        el.textContent = value;
+    const isHidden = field.getAttribute('data-hidden') === 'true';
+    const value = field.getAttribute('data-value');
+
+    if (isHidden) {
+        field.textContent = value;
+        field.setAttribute('data-hidden', 'false');
+        icon.textContent = 'visibility_off';
     } else {
-        el.textContent = '••••••••';
+        field.textContent = '••••••••';
+        field.setAttribute('data-hidden', 'true');
+        icon.textContent = 'visibility';
     }
 };
 
-window.copyToClipboard = function (text) {
+window.copyField = function (text) {
     navigator.clipboard.writeText(text);
     alert('Copiado!');
 };
