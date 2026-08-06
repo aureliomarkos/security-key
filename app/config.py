@@ -15,7 +15,8 @@ class Settings(BaseSettings):
     # Aplicação
     APP_NAME: str = os.getenv("APP_NAME", "Security Key")
     APP_VERSION: str = os.getenv("APP_VERSION", "1.0.0")
-    DEBUG: bool = os.getenv("DEBUG", "False").lower() in ["true", "1", "t"]
+    ENABLE_DOCS: bool = os.getenv("ENABLE_DOCS", "false").lower() in ("true", "1", "yes")
+    DEBUG: bool = os.getenv("ENVIRONMENT", "development") == "development"
     
     # Banco de dados
     DATABASE_URL: str = os.getenv("DATABASE_URL", "")
