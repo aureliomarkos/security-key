@@ -455,14 +455,14 @@ function buildFieldHTML(itemId, c, idx, mobile) {
         return `<div class="flex items-center gap-2 text-sm ${borderClass}">
             <span class="${baseClass} w-20 truncate shrink-0">${c.label}:</span>
             <span id="${fieldId}" class="${valueClass} truncate flex-1" data-value="${escapedValue}" data-hidden="true">&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;</span>
-            <button onclick="togglePassword('${fieldId}')" class="${baseClass} hover:text-primary shrink-0"><span id="${fieldId}_icon" class="material-symbols-outlined text-[16px]">visibility</span></button>
-            <button onclick="copyField('${escapedValue}')" class="${baseClass} hover:text-primary shrink-0"><span class="material-symbols-outlined text-[16px]">content_copy</span></button>
+            <button onclick="event.stopPropagation(); togglePassword('${fieldId}')" class="${baseClass} hover:text-primary shrink-0"><span id="${fieldId}_icon" class="material-symbols-outlined text-[16px]">visibility</span></button>
+            <button onclick="event.stopPropagation(); copyField('${escapedValue}')" class="${baseClass} hover:text-primary shrink-0"><span class="material-symbols-outlined text-[16px]">content_copy</span></button>
         </div>`;
     } else {
         return `<div class="flex items-center gap-2 text-sm ${borderClass}">
             <span class="${baseClass} w-20 truncate shrink-0">${c.label}:</span>
             <span class="${valueClass} truncate flex-1">${c.value || '-'}</span>
-            ${mobile ? `<button onclick="copyField('${escapedValue}')" class="${baseClass} hover:text-primary shrink-0"><span class="material-symbols-outlined text-[16px]">content_copy</span></button>` : ''}
+            ${mobile ? `<button onclick="event.stopPropagation(); copyField('${escapedValue}')" class="${baseClass} hover:text-primary shrink-0"><span class="material-symbols-outlined text-[16px]">content_copy</span></button>` : ''}
         </div>`;
     }
 }
