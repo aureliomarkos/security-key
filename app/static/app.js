@@ -819,6 +819,14 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('itemForm')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const id = document.getElementById('itemId').value;
+        const categoryId = document.getElementById('itemCategoria').value;
+        if (!categoryId) {
+            const sel = document.getElementById('itemCategoria');
+            sel.focus();
+            sel.classList.add('ring-2', 'ring-red-500');
+            sel.addEventListener('change', () => sel.classList.remove('ring-2', 'ring-red-500'), { once: true });
+            return;
+        }
         const campos = [];
         document.querySelectorAll('#fieldsContainer > div').forEach(div => {
             const label = div.querySelector('.field-label').value;
@@ -828,7 +836,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         const data = {
             titulo: document.getElementById('itemTitulo').value,
-            category_id: document.getElementById('itemCategoria').value || null,
+            category_id: categoryId,
             favorito: document.getElementById('itemFavorito').checked,
             nota_adicional: document.getElementById('itemNota').value,
             campos
